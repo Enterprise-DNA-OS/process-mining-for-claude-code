@@ -1,11 +1,57 @@
 [
   {
-    "name": "example",
-    "title": "TODO(author): the first document this industry must produce",
-    "for_each": "select gen_random_uuid() as id, 'Example' as name",
-    "file": "name",
+    "name": "process-review",
+    "title": "Weekly process review",
+    "for_each": "select id,code from processes order by code",
+    "file": "code",
     "sections": [
-      { "title": "Details", "sql": "select 'replace me' as item, $1::text as record_id" }
+      {
+        "title": "Purpose and owner",
+        "layout": "record",
+        "sql": "select code,name,owner,purpose,retention_review,evidence_ref,reviewed_at from processes where id=$1"
+      },
+      {
+        "title": "Outstanding work",
+        "sql": "select item,reason,owner from attention_queue where process_id=$1 order by item"
+      },
+      {
+        "title": "Observed paths",
+        "sql": "select path,cases,closed_cases,mean_closed_hours from variant_summary where process_id=$1 order by cases desc"
+      }
+    ]
+  },
+  {
+    "name": "case-history",
+    "title": "Case history and checkpoint record",
+    "for_each": "select id,code from cases order by code",
+    "file": "code",
+    "sections": [
+      {
+        "title": "Case",
+        "layout": "record",
+        "sql": "select process,code,name,state,observed_hours,repeated_steps from case_summary where id=$1"
+      },
+      {
+        "title": "Events",
+        "sql": "select activity,started_at,ended_at,resource,role from events where case_id=$1 order by started_at,event_key"
+      },
+      {
+        "title": "Checkpoint findings",
+        "sql": "select checkpoint,finding,source_ref from checkpoint_findings where case_id=$1"
+      }
+    ]
+  },
+  {
+    "name": "improvement-record",
+    "title": "Process improvement action",
+    "for_each": "select id,code from actions order by code",
+    "file": "code",
+    "sections": [
+      {
+        "title": "Action and outcome",
+        "layout": "record",
+        "sql": "select code,title,owner,due,state,resolution,created_at,updated_at from actions where id=$1"
+      }
     ]
   }
 ]

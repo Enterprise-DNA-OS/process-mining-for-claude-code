@@ -1,13 +1,46 @@
 [
   {
     "name": "week",
-    "title": "This week",
-    "subtitle": "Process Mining for Claude Code: what needs attention, rendered by npm run view",
+    "title": "Process review: this week",
     "sections": [
       {
         "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
+        "sql": "select process,item,reason,owner from attention_queue order by process,item"
+      },
+      {
+        "title": "Improvement work",
+        "sql": "select code,title,owner,due,state from actions order by due"
+      }
+    ]
+  },
+  {
+    "name": "flow",
+    "title": "Process paths and delays",
+    "sections": [
+      {
+        "title": "Observed paths",
+        "sql": "select process,path,cases,closed_cases,mean_closed_hours from variant_summary order by process,cases desc",
+        "note": "Only cases explicitly marked closed contribute to completed-case duration averages."
+      },
+      {
+        "title": "Elapsed gaps",
+        "sql": "select process,previous_activity,activity,measured_gaps,mean_gap_hours,max_gap_hours,overlapping_events from transition_summary order by max_gap_hours desc nulls last",
+        "note": "Gaps are elapsed calendar hours between adjacent events with known end times. They are not measured idle labour or business hours."
+      }
+    ]
+  },
+  {
+    "name": "evidence",
+    "title": "Checkpoint and source review",
+    "sections": [
+      {
+        "title": "Checkpoint findings",
+        "sql": "select process,case_code,checkpoint,finding from checkpoint_findings order by process,case_code"
+      },
+      {
+        "title": "Privacy evidence reminders",
+        "sql": "select process,rule,finding from compliance_findings order by process,rule",
+        "note": "Record checks support review of purpose, accuracy and retention. They do not certify legal compliance."
       }
     ]
   }

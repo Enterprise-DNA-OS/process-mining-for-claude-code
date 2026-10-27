@@ -1,115 +1,144 @@
-<h1 align="center">Process Mining for Claude Code</h1>
+# Process Mining for Claude Code
 
-<p align="center">
-  <strong>The open-source process mining desk that is just a database and Claude Code.</strong>
-</p>
+Find where work waits, which steps repeat and who owns the fix. Keep your event histories and process improvement work in a database you own.
 
-<p align="center">
-  Created by <a href="https://www.enterprisedna.co"><strong>Enterprise DNA</strong></a>. Free and open source. Works with Claude Code, Codex, OpenCode or Cursor.
-</p>
+| Do it yourself | We customise it | We run it for you |
+|---|---|---|
+| Free MIT code, installed and operated by you. | Your process rules, fields, reports and IBM event-history mapping. | Installed, connected and operated through Omni by Enterprise DNA. |
+| [Quick start](#quick-start) | One setup fee, then a retainer. [Get your version built](https://enterprisedna.co/omni/book?offer=replace-software&utm_campaign=ibm-process-mining) | One setup fee, then a retainer. [Talk to Sam](https://enterprisedna.co/omni/book?offer=replace-software&utm_campaign=ibm-process-mining) |
 
-<!-- three-doors -->
-<table align="center">
-  <tr>
-    <td align="center"><strong>Do it yourself</strong><br/>Clone it, run it, own it. Free, MIT.<br/><a href="#quick-start">Quick start</a></td>
-    <td align="center"><strong>We customise it</strong><br/>Your fields, your rules, your IBM Process Mining data brought across.<br/><a href="https://enterprisedna.co/omni/book/?utm_source=github&utm_medium=readme&utm_campaign=ibm-process-mining">Book a call</a></td>
-    <td align="center"><strong>We run it for you</strong><br/>Installed, connected and operated inside Omni. Setup fee, then a retainer.<br/><a href="https://enterprisedna.co/omni/instead-of/ibm-process-mining?utm_source=github&utm_medium=readme&utm_campaign=ibm-process-mining">How it works</a></td>
-  </tr>
-</table>
+## The annual bill
 
-<p align="center">
-  <a href="#what-is-this">What is this</a> &bull;
-  <a href="#why-no-front-end">Why no front end</a> &bull;
-  <a href="#quick-start">Quick start</a> &bull;
-  <a href="#the-commands">Commands</a> &bull;
-  <a href="#instead-of-ibm-process-mining">Instead of IBM Process Mining</a> &bull;
-  <a href="#want-it-installed-and-run-for-you">Installed for you</a> &bull;
-  <a href="#license">License</a>
-</p>
+[IBM's pricing page](https://www.ibm.com/products/process-mining/pricing), checked 27 October 2026, lists its SaaS platform from US$4,250 a month, sold annually. That is US$51,000 a year at the published starting rate, not an observed customer invoice. The starting package includes 20 GB storage, three business users and one analyst user. Confirm your own contract and scope.
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Node-20+-339933?style=flat-square" alt="Node 20+" />
-  <img src="https://img.shields.io/badge/PostgreSQL-any-336791?style=flat-square" alt="PostgreSQL" />
-  <img src="https://img.shields.io/badge/PGlite-embedded-3ecf8e?style=flat-square" alt="PGlite" />
-  <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="MIT License" />
-</p>
-
----
-
-## What is this
-
-Process Mining for Claude Code does the job you pay IBM Process Mining for, as a Postgres database and a set of agent commands. There is no web front end. You open the folder in [Claude Code](https://claude.com/claude-code) (or Codex, OpenCode, Cursor: see `AGENTS.md`) and ask for what you want in plain language. It runs the right query, and it can answer questions the IBM Process Mining dashboard cannot.
-
-<!-- TODO(author): the annual bill. One sentence: what a 10 to 50 person business typically pays IBM Process Mining per year, all in, with a source. -->
-
-Want the same thing with a web front end, or built on a different stack? That is a customisation, and it is exactly what Enterprise DNA does: [book a call](https://enterprisedna.co/omni/book/?utm_source=github&utm_medium=readme&utm_campaign=ibm-process-mining).
-
-<!-- TODO(author): two or three sentences on what this specific product covers and who it is for. -->
-
-## Why no front end
-
-- The front end was only ever there because the database was hard to talk to. That is no longer true.
-- Your data sits in plain Postgres tables you own. Any tool can read them. No export, no lock-in.
-- No seats, no tiers, no add-ons. Read [docs/why-no-front-end.md](docs/why-no-front-end.md) for the honest trade-offs too.
+This independent project covers event-history analysis and the work that follows. IBM Process Mining is a broader platform with simulation, interactive modelling and connections. This build does not claim feature parity or IBM affiliation. IBM and its marks belong to their owners.
 
 ## Quick start
 
-Sixty seconds, no database install (an embedded Postgres runs inside Node):
+Node 20 or later. PGlite runs locally; DATABASE_URL selects a trusted Postgres database.
 
 ```bash
 git clone https://github.com/Enterprise-DNA-OS/process-mining-for-claude-code.git
 cd process-mining-for-claude-code
 npm install
+npm test
 npm run demo
+npm run view
+npm run docs
+node scripts/mining.mjs help
 ```
 
-Then open the folder in Claude Code and type a slash command. <!-- TODO(author): name the first command to try. -->
+Open the folder in Claude Code, Codex, OpenCode or Cursor. CLAUDE.md and AGENTS.md route everyone through the same command library. The seed is fictional and idempotent, with overdue actions, a stalled case, repeated picking and a missing approval. Relative dates are set on first seed. Use a fresh DATA_DIR and migrate alone for business records. Never seed a working business database.
 
-### Use it with your own Postgres or Supabase
+## Five weekly rituals
 
-Copy `.env.example` to `.env`, set `DATABASE_URL`, then `npm run migrate`. Same commands, shared data, no per-seat fee.
+1. `/case-review`: distinguish open, closed and unknown cases and inspect their elapsed times.
+2. `/bottlenecks`: review the largest elapsed gaps between adjacent recorded steps.
+3. `/rework`: find repeated activities and check who owns the follow-up.
+4. `/checkpoint-review`: find downstream steps without a completed required predecessor.
+5. `/actions`: review assigned improvements, due dates and recorded resolutions.
 
-## The commands
+`/attention` combines outstanding work. `/weekly-review` drafts a Monday review from attention, bottlenecks and checkpoints. `/draft-case` produces a case-specific handover. Nothing sends.
 
-<!-- TODO(author): a table of the slash commands in .claude/commands and what each one does. -->
+## Commands
 
-| Command | What it does |
-|---|---|
-| `/...` | ... |
+Flags use `--key=value`. Every command accepts `--json`. Names and UUID prefixes match without case sensitivity. A full code wins first. Ambiguous names list candidates and exit 1. Case codes are unique within a process; use `--process` where two processes share a case code. Actor labels are attribution, not authenticated identity.
 
-## Instead of IBM Process Mining
-
-<!-- TODO(author): how to bring data across from IBM Process Mining; link docs/replace-ibm-process-mining.md -->
-
-## Architecture
+```text
+help
+processes
+cases --process=ORDERS
+show ORD-102
+variants --process=ORDERS
+bottlenecks --process=ORDERS
+rework
+case-review
+checkpoints
+checkpoint-review
+actions
+attention
+compliance
+insights
+history ORDERS
+add --code=SERVICE --name="Service requests" --owner="Operations lead" --purpose="Review request delays" --terminal="Close case" --sla-hours=120 --stale-hours=72 --retention-review=2027-01-01 --actor="Operator"
+configure ORDERS --sla-hours=96 --actor="Operator"
+review ORDERS --evidence="internal/source-reconciliation" --actor="Operator"
+add-case --process=ORDERS --code=ORD-104 --name="New order" --actor="Operator"
+case-state ORD-102 --state=open --note="Confirmed still outstanding" --actor="Operator"
+add-event ORD-102 --key=source-event-123 --activity=Dispatch --start=2026-10-20T09:00:00Z --end=2026-10-20T09:30:00Z --resource=depot-a --role=Warehouse --actor="Operator"
+add-checkpoint --process=ORDERS --code=PACK --before=Pack --after=Dispatch --source="internal/dispatch-policy" --actor="Operator"
+add-action --process=ORDERS --case=ORD-102 --code=ACT-3 --title="Confirm dispatch history" --owner="Warehouse lead" --due=2026-11-01 --actor="Operator"
+complete-action ACT-1 --resolution="Source record checked and corrected upstream" --actor="Operator"
+log ORDERS --note="Reviewed event extraction with process owner" --actor="Operator"
+import ibm-process-mining examples/ibm-events.csv --process=ORDERS --source=ibm-orders --dry-run --actor="Operator"
+export --out=exports/process-records.json
+weekly-review --process=ORDERS
+draft-case ORD-102
 
 ```
-process-mining-for-claude-code/
-  CLAUDE.md                 how the operator wants this run (routing table + house rules)
-  AGENTS.md                 the same, for Codex / OpenCode / Cursor / Gemini CLI
-  .claude/commands/         the slash commands
-  scripts/                  the CLI the commands drive
-  scripts/lib/db.mjs        one adapter: DATABASE_URL (pg) or embedded PGlite
-  supabase/migrations/      plain SQL schema
-  supabase/seed.sql         demo data
-  docs/                     the thesis and the migration guide
+
+`add` creates a process, `add-case` creates an unknown-status case, and `add-event` appends an event. `configure` changes targets and ownership. `review` records source reconciliation evidence. `case-state` records an operator's completion decision. Closing requires a final terminal activity with an end time. New events require a case to be reopened first. `add-checkpoint` records a local policy and its source. `complete-action` requires a resolution. Every successful domain mutation appends an audit event in the same transaction.
+
+## What the numbers mean
+
+- Observed hours run from the first recorded start to the latest recorded end, or start if an end is missing. This is a history span, not measured labour time.
+- Open-case elapsed hours run from the first recorded start to now. Unknown cases do not silently enter the open or completed averages.
+- Gap hours run from the previous event's known end to the next event's start. Missing ends are excluded. Overlaps are counted separately and do not become negative waiting times.
+- Paths follow start-time order, breaking equal timestamps by a stable event key. Simultaneous starts are flagged by insights. That display order is not proof of a causal sequence.
+- Repeated steps equal event count minus distinct activity count. Repetition can be legitimate and does not prove an error.
+- Checkpoints require at least one predecessor to have finished before each checked step starts. This is a selected-rule check, not full model conformance.
+- Targets and quiet-work thresholds use calendar hours. There is no working-day calendar, simulation, cost model or automatic savings estimate.
+
+## Bring your history across
+
+```bash
+node scripts/mining.mjs import ibm-process-mining examples/ibm-events.csv --process=ORDERS --source=ibm-orders --dry-run --actor="Operator"
+node scripts/mining.mjs import ibm-process-mining examples/ibm-events.csv --process=ORDERS --source=ibm-orders --actor="Operator"
+node scripts/mining.mjs export --out=exports/history.json
 ```
 
-## Built for coding agents
+Use the original IBM event-history input or an event-level CSV export, not an aggregated chart. The importer maps case, activity, start, end, resource and role, and preserves original rows. Preview rolls back all writes. Exact replays skip events. Later snapshots must preserve earlier rows unchanged and can add events. Changed or removed rows fail for explicit reconciliation. [The switching guide](docs/replace-ibm-process-mining.md) covers header mapping, timestamps, export steps and the parts that do not carry across.
 
-The database, CLI and command recipes work with Claude Code, Codex, OpenCode or Cursor. Ask your coding agent for a new command and have it implement and test the change against the same records.
+## Ten questions to ask
 
-## Contributing
+`node scripts/mining.mjs insights` answers these from the current records. They combine process history with your follow-up work. IBM supports custom metrics too; these are not claims that IBM cannot answer them with configuration.
 
-Issues and pull requests are welcome. Keep the shape: plain SQL, a small CLI, a slash command per recurring job, no front end.
+1. Which open cases exceed their target without an improvement owner?
+2. Which repeated steps have no open improvement action?
+3. Which closed cases still have an unresolved checkpoint finding?
+4. Which observed paths combine repeated work and completed cases?
+5. Which handovers have gaps longer than the local quiet-work threshold?
+6. Which cases have no activity history at all?
+7. Which imported histories still need an accuracy review?
+8. Which processes have retention reviews due while work remains open?
+9. Which cases have simultaneous starts that make sequence uncertain?
+10. Which overdue actions belong to cases already marked closed?
 
-## Want it installed and run for you?
+## Documents and views
 
-Enterprise DNA installs Process Mining for Claude Code for your business, migrates your IBM Process Mining data, connects it to the rest of your tools, and runs it for you as part of **Omni**, our managed Command Center. One setup fee, then a monthly retainer.
+`npm run docs` renders process reviews, case-history records and improvement records as branded HTML. `npm run view` renders the week, paths and gaps, and evidence review. Change the business name, logo and colours in brand.json. `/new-view` adds a read-only report. There is no frontend server. See [why no front end](docs/why-no-front-end.md) for scope.
 
-- Book a call: [enterprisedna.co/omni/book](https://enterprisedna.co/omni/book/?offer=replace-software&utm_source=github&utm_medium=readme&utm_campaign=ibm-process-mining)
-- Read more: [enterprisedna.co/omni/instead-of/ibm-process-mining](https://enterprisedna.co/omni/instead-of/ibm-process-mining?utm_source=github&utm_medium=readme&utm_campaign=ibm-process-mining)
+`/compliance` flags missing purpose, missing source-review evidence and retention reviews that are due. [Compliance sources](docs/compliance.md) link the selected New Zealand privacy principles and explain what the checks do not establish. No record is automatically erased and no compliance certification is produced.
 
-## License
+## Your first hour: ten things to ask for
 
-MIT. Copyright (c) 2026 Enterprise DNA.
+1. Put our name and colours on the process review.
+2. Create the process we review every Monday.
+3. Name its owner and purpose.
+4. Set our completion activity and calendar-hour target.
+5. Preview a small event export and reconcile the case count.
+6. Check the source timestamp offsets, including daylight-saving changes.
+7. Confirm which cases are still open and which have finished.
+8. Add our approval-before-dispatch checkpoint and policy reference.
+9. Assign an owner and due date to the oldest repeated step.
+10. Add a branch field through `/customise` with a tested migration and report.
+
+## Operating boundaries
+
+One organisation per database, trusted internal operators only. Row-level security is enabled without public policies. Shared deployment needs authentication, scoped database roles, secret storage, encrypted backups and tested restoration. Never expose the owner database role to an untrusted user. Keep credentials and real exports outside Git.
+
+Original source rows, resource identifiers, notes, reports and exports can contain personal data. Apply your approved retention policy to all copies. HTML escapes record content. CSV exports neutralise formula prefixes. Output files use restrictive permissions where the operating system supports them. Event, note and audit records reject normal updates and deletes; the database owner can alter those safeguards. Erasure and corrections need an authorised administrator and reconciliation, not an automatic import overwrite.
+
+JSON export is a portable copy of all domain records, not a backup-restore mechanism. The CSV export is for spreadsheet review. `npm test` uses disposable storage and exercises all 29 CLI commands. A manual workflow provides Linux and Windows Node 20/22 checks and Postgres 17. [Verification](docs/verification.md) distinguishes checks actually run from available workflow checks.
+
+MIT. Built by Enterprise DNA.

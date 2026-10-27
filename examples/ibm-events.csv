@@ -1,0 +1,5 @@
+ProcessID,Activity,StartTime,EndTime,Resource,Role,Region
+IMP-001,Receive,2026-01-05T09:00:00Z,2026-01-05T09:10:00Z,rep-c,Sales,North
+IMP-001,Approve,2026-01-05T10:00:00Z,2026-01-05T10:15:00Z,lead-c,Operations,North
+IMP-001,Dispatch,2026-01-06T09:00:00Z,2026-01-06T09:30:00Z,depot-c,Warehouse,North
+IMP-002,Receive,2026-01-05T11:00:00Z,,rep-d,Sales,South
