@@ -17,3 +17,7 @@ The manual GitHub workflow includes Windows and Linux on Node 20/22 plus Postgre
 The import example is synthetic, following IBM's documented event model. No customer export or production database was used. Large-event-volume performance and full IBM platform compatibility are not claimed.
 
 The landing route rendered HTTP 200 in an isolated local preview using the unchanged Landing Pages components. The page has noindex,nofollow, all three offers and six attributed booking links. Desktop and mobile screenshots were inspected. The process dashboard and mobile case history were inspected too. A shared renderer improvement keeps wide report tables scrollable and timestamps on one line. That improvement is also in the Command Centre template for the runner to commit.
+
+[Hosted workflow run](https://github.com/Enterprise-DNA-OS/process-mining-for-claude-code/actions/runs/40443529802) stopped before any steps ran. GitHub's annotation reports an account payment failure or spending limit. Windows Node 20/22 and hosted Postgres 17 remain unverified. Local PGlite and Postgres 18.4 checks above completed successfully. No billing settings were changed.
+
+The private repository was pushed and GitHub reported `isPrivate: true`. Landing Pages commit `08c76d11` was pushed with the target still noindex and unlinked. The public page URL returned HTTP 404 at the final network check, so host deployment is not claimed. Local preview HTTP 200 is separate evidence. All preview servers and browsers started for this run were closed. Publishing belongs to the runner.
